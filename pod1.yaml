@@ -1,16 +1,18 @@
 apiVersion: v1
 kind: Pod
 metadata:
- name: demoapp
- labels:
- name: demoapp
+  name: nginx-pv-pod
 spec:
- containers:
- - name: demoimage
- image: nginx
- resources:
- limits:
- memory: "128Mi"
- cpu: "500m"
- ports:
- - containerPort: 5000
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: nginx-storage
+  volumes:
+    - name: nginx-storage
+      persistentVolumeClaim:
+        claimName: nginx-pv-claim
